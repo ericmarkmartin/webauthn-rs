@@ -293,7 +293,10 @@ pub enum UserVerificationPolicy {
 }
 
 // These are the primary communication structures you will need to handle.
-pub(crate) type AuthenticationExtensionInputs = BTreeMap<String, String>;
+
+// pub(crate) because we don't support any such extensions yet and thus there is
+// no need to expose this to users
+pub(crate) type RequestAuthenticationExtensions = BTreeMap<String, String>;
 
 /// Relying Party Entity
 #[derive(Debug, Serialize, Clone, Deserialize)]
@@ -661,7 +664,7 @@ pub struct PublicKeyCredentialRequestOptions {
     /// The verification policy the browser will request.
     pub user_verification: UserVerificationPolicy,
     /// extensions.
-    pub extensions: Option<AuthenticationExtensionInputs>,
+    pub extensions: Option<RequestAuthenticationExtensions>,
 }
 
 /// A JSON serialisable challenge which is issued to the user's webbrowser
@@ -731,7 +734,7 @@ impl RequestChallengeResponse {
         relaying_party: String,
         allow_credentials: Vec<AllowCredentials>,
         user_verification_policy: UserVerificationPolicy,
-        extensions: Option<AuthenticationExtensionInputs>,
+        extensions: Option<RequestAuthenticationExtensions>,
     ) -> Self {
         RequestChallengeResponse {
             public_key: PublicKeyCredentialRequestOptions {
